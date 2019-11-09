@@ -1,6 +1,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 
+#include "header.h"
 
 /**
  * Function `insert_end` allow to insert a new node at the end of a Linked list
@@ -109,25 +110,20 @@ void delete_node(Node **root, Node *node) {
         }
     }
 }
-/**
- * Function `reverse_ll` allow to reverse a Linked list
- * The `tail` become the `head` and the `head` become the `tail`
-*/
+// TODO: complete the function and make it correct
 void reverse_ll(Node **root)
 {
     Node *prev = NULL;
     Node *curr = *root;
 
-    while (curr != NULL)
+    while (curr->next != NULL)
     {
         Node *next = curr->next;
-
-        curr->next = prev;
-        prev = curr;
-        curr = next;
+        prev = curr->next;
+        next->next = curr;
+        curr = curr->next;
     }
 
-    *root = prev;
 }
 /**
  * Function `has_loop` allow to detect if a Linked list has a cycle loop or not
@@ -154,24 +150,12 @@ int count_elems(Node *root)
 {
     int counter = 0;
 
-    for (Node *curr = root; curr != NULL; curr = curr->next)
+    for (Node curr = root; curr != NULL; curr = curr->next)
     {
         counter++;
     }
 
     return counter;
-}
-/**
- * Function `count_elems_recursive` allow to count the number of elements in a Linked list recursively
-*/
-int count_elems_recursive(Node *root)
-{
-    if (root == NULL)
-    {
-        return -1;
-    }
-
-    return 1 + count_elems_recursive(root->next);
 }
 /**
  * Function `deallocate` allow to free a whole Linked list passed in parameter
@@ -187,32 +171,4 @@ void deallocate(Node **root)
         free(aux);
     }
     *root = NULL;
-}
-
-int main(int argc, char *argv[]) {
-
-    Node *root = NULL;
-
-    insert_end(&root, 0);
-    insert_end(&root, 1);
-    insert_end(&root, 2);
-    insert_end(&root, 3);
-    //reverse_ll(&root);
-    root->next->next->next = root;
-
-    if (has_loop(root) == 1)
-    {
-        printf("Linked list has a loop.");
-    }
-
-    for (Node *curr = root; curr != NULL; curr = curr->next)
-    {
-        printf("Value : %d \n Address : %p\n", curr->x, curr);
-    }
-    printf("Linked list has %d elements.\n", count_elems(root));
-    printf("Linked list has %d elements.", count_elems_recursive(root));
-    // We deallocate the linked List and the end of all operations
-    deallocate(&root);
-
-    return 0;
 }
